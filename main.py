@@ -98,13 +98,13 @@ def main():
     url = 'https://api.spacexdata.com/v3/launches/'
     apod_url = "https://api.nasa.gov/planetary/apod"
     epic_link = "https://api.nasa.gov/EPIC/api/natural/date/2021-12-13"
-    # get_image_url(url)            # работает
-    # fetch_spacex_last_launch(url) # работает
-    # get_url_extension(apod_url)     # работает125
-    # get_apod(apod_url)               # работает
-    # get_apod_photo(apod_url)           # работает
-    # get_epic_link(epic_link)                  # работает
-    # get_epic_photo(epic_link)        # работает
+    get_image_url(url)            # работает
+    fetch_spacex_last_launch(url) # работает
+    get_url_extension(apod_url)     # работает
+    get_apod(apod_url)               # работает
+    get_apod_photo(apod_url)           # работает
+    get_epic_link(epic_link)                  # работает
+    get_epic_photo(epic_link)        # работает
 
 if __name__ == "__main__":
     main()
