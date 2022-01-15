@@ -73,21 +73,25 @@ def get_epic_link(epic_link):
     date_link = response[0]["date"]
     image_name = response[0]["image"]
     date = datetime.datetime.fromisoformat(date_link)
-    epic_photo_link = f"https://api.nasa.gov/EPIC/archive/natural/{date.year}/{date.month}/{date.day}/png/{image_name}.png?api_key=o0LD7Oi1sBhhKp2hJVSiuiIj1G2gZNh4SZRxG537"
+    epic_photo_link = f"https://api.nasa.gov/EPIC/archive/natural/{date.year}/{date.month}/{date.day}/png/{image_name}.png"
     epic_photo_link_list = []
 
     for image in response:
         epic_photo_link = f"https://api.nasa.gov/EPIC/archive/natural/{date.year}/{date.month}/" \
-                              f"{date.day}/png/{image['image']}.png?api_key=o0LD7Oi1sBhhKp2hJVSiuiIj1G2gZNh4SZRxG537"
+                              f"{date.day}/png/{image['image']}.png"
         epic_photo_link_list.append(epic_photo_link)
     return epic_photo_link_list
 
 
 def get_epic_photo(epic_link):
+    api_key = os.getenv("API_KEY")
     Path('photos_from_space/epic_pics').mkdir(parents=True, exist_ok=True)
     for number, links in enumerate(get_epic_link(epic_link)):
         filename = Path("epic_pics", f'epic_pics{number}.jpeg')
-        response = requests.get(links)
+        payload = {
+            "api_key": api_key
+        }
+        response = requests.get(links,params=payload)
         response.raise_for_status()
         with open(filename, 'wb') as file:
             file.write(response.content)
@@ -98,13 +102,13 @@ def main():
     url = 'https://api.spacexdata.com/v3/launches/'
     apod_url = "https://api.nasa.gov/planetary/apod"
     epic_link = "https://api.nasa.gov/EPIC/api/natural/date/2021-12-13"
-    get_image_url(url)            # работает
-    fetch_spacex_last_launch(url) # работает
-    get_url_extension(apod_url)     # работает
+    # get_image_url(url)            # работает
+    # fetch_spacex_last_launch(url) # работает
+    # get_url_extension(apod_url)     # работает
     get_apod(apod_url)               # работает
     get_apod_photo(apod_url)           # работает
-    get_epic_link(epic_link)                  # работает
-    get_epic_photo(epic_link)        # работает
+    # get_epic_link(epic_link)                  # работает
+    # get_epic_photo(epic_link)        # работает
 
 if __name__ == "__main__":
     main()
