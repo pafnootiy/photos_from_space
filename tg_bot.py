@@ -8,16 +8,22 @@ from dotenv import load_dotenv
 
 
 def main():
+
     load_dotenv()
 
     bot = telegram.Bot(token=os.getenv("TG_TOKEN"))
-    updates = bot.get_updates()
     chat_id = os.getenv("CHAT_ID")
+    bot_time = os.getenv("TIME")
     while True:
         path = "apod_pics"
         for photo in listdir(path):
             if isfile(joinpath(path, photo)):
-                bot.send_document(chat_id=chat_id, document=open(f'apod_pics/{photo}', 'rb'))
-        time.sleep(30)
+                filepath = f'apod_pics/{photo}'
+                with open(filepath, 'rb') as file:
+                    image_file = file.read()
+                bot.send_document(chat_id=chat_id, document=image_file)
+        time.sleep(int(bot_time))
+
+
 if __name__ == "__main__":
     main()
