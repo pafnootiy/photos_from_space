@@ -2,4 +2,8 @@
 /shelf/
 /workspace.xml
 *.env
-*.idea
+*apod_pics
+*epic_pics
+*images
+*photos_from_space
+
