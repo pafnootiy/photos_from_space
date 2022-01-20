@@ -23,10 +23,10 @@ def main():
     bot = telegram.Bot(token=os.getenv("TG_TOKEN"))
     chat_id = os.getenv("CHAT_ID")
     bot_time = os.getenv("TIME")
+    for folder in folders:
+        print(folder)
+        post_photo_in_tg(folder, chat_id, bot)
     while True:
-        for folder in folders:
-            print(folder)
-            post_photo_in_tg(folder, chat_id, bot)
         time.sleep(int(bot_time))
 
 
