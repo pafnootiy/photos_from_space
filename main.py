@@ -6,7 +6,7 @@ import requests
 from dotenv import load_dotenv
 
 
-def get_flight_url(url, flight_number):
+def get_flight_urls(url, flight_number):
     payload = {
         'flight_number': flight_number
     }
@@ -18,7 +18,7 @@ def get_flight_url(url, flight_number):
 
 def fetch_spacex_last_launch(url, flight_number, path_for_images_photos):
     Path(path_for_images_photos).mkdir(parents=True, exist_ok=True)
-    for number, link in enumerate(get_flight_url(url, flight_number)):
+    for number, link in enumerate(get_flight_urls(url, flight_number)):
         filename = Path("images", f'spacex{number}.jpeg')
         response = requests.get(link)
         response.raise_for_status()
