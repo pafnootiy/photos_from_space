@@ -5,7 +5,8 @@ import requests
 from dotenv import load_dotenv
 
 
-def get_flight_urls(url, flight_number):
+def get_flight_urls(flight_number):
+    url = 'https://api.spacexdata.com/v3/launches/'
     payload = {
         'flight_number': flight_number
     }
@@ -15,9 +16,9 @@ def get_flight_urls(url, flight_number):
     return response[0]['links']['flickr_images']
 
 
-def fetch_spacex_last_launch(url, flight_number, path_for_images_photos):
+def fetch_spacex_last_launch(flight_number, path_for_images_photos):
     Path(path_for_images_photos).mkdir(parents=True, exist_ok=True)
-    for number, link in enumerate(get_flight_urls(url, flight_number)):
+    for number, link in enumerate(get_flight_urls(flight_number)):
         filename = Path("images", f'spacex{number}.jpeg')
         response = requests.get(link)
         response.raise_for_status()
@@ -25,7 +26,8 @@ def fetch_spacex_last_launch(url, flight_number, path_for_images_photos):
             file.write(response.content)
 
 
-def get_apod_urls(apod_url, api_key):
+def get_apod_urls(api_key):
+    apod_url = "https://api.nasa.gov/planetary/apod"
     payload = {
         "api_key": api_key,
         "count": 15
@@ -38,9 +40,9 @@ def get_apod_urls(apod_url, api_key):
     return apod_photo_links
 
 
-def download_apod_photos(apod_url, api_key, path_for_apod_photos):
+def download_apod_photos(api_key, path_for_apod_photos):
     Path(path_for_apod_photos).mkdir(parents=True, exist_ok=True)
-    for numbers, link in enumerate(get_apod_urls(apod_url, api_key)):
+    for numbers, link in enumerate(get_apod_urls(api_key)):
         filename = Path("apod_pics", f'apod_pics{numbers}.jpeg')
         response = requests.get(link)
         response.raise_for_status()
@@ -48,7 +50,8 @@ def download_apod_photos(apod_url, api_key, path_for_apod_photos):
             file.write(response.content)
 
 
-def get_epic_links(epic_link, api_key):
+def get_epic_links(api_key):
+    epic_link = "https://api.nasa.gov/EPIC/api/natural/date/2021-12-13"
     payload = {
         "api_key": api_key
     }
@@ -66,9 +69,9 @@ def get_epic_links(epic_link, api_key):
     return epic_photo_links
 
 
-def download_epic_photos(epic_link, api_key, path_for_epic_photos):
+def download_epic_photos(api_key, path_for_epic_photos):
     Path(path_for_epic_photos).mkdir(parents=True, exist_ok=True)
-    for number, links in enumerate(get_epic_links(epic_link, api_key)):
+    for number, links in enumerate(get_epic_links(api_key)):
         filename = Path("epic_pics", f'epic_pics{number}.jpeg')
         payload = {
             "api_key": api_key
@@ -82,16 +85,13 @@ def download_epic_photos(epic_link, api_key, path_for_epic_photos):
 def main():
     load_dotenv()
     api_key = os.getenv("NASA_TOKEN")
-    url = 'https://api.spacexdata.com/v3/launches/'
     flight_number = 107
-    apod_url = "https://api.nasa.gov/planetary/apod"
-    epic_link = "https://api.nasa.gov/EPIC/api/natural/date/2021-12-13"
     path_for_images_photos = "photos_from_space/images"
     path_for_apod_photos = "photos_from_space/apod_pics"
     path_for_epic_photos = 'photos_from_space/epic_pics'
-    fetch_spacex_last_launch(url, flight_number, path_for_images_photos)
-    download_apod_photos(apod_url, api_key, path_for_apod_photos)
-    download_epic_photos(epic_link, api_key, path_for_epic_photos)
+    fetch_spacex_last_launch(flight_number, path_for_images_photos)
+    download_apod_photos(api_key, path_for_apod_photos)
+    download_epic_photos(api_key, path_for_epic_photos)
 
 
 if __name__ == "__main__":
