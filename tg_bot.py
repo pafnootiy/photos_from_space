@@ -24,8 +24,8 @@ def main():
     bot_time = os.getenv("TIME")
     while True:
         for folder in folders:
+            time.sleep(int(bot_time))
             post_photo_in_tg(folder, chat_id, bot)
-        time.sleep(int(bot_time))
 
 
 if __name__ == "__main__":
